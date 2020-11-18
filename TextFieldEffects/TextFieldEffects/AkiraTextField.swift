@@ -16,6 +16,7 @@ import UIKit
     open var borderLayer = CALayer()
     open var textFieldInsets = CGPoint(x: 6, y: 0)
     open var placeholderInsets = CGPoint(x: 6, y: 0)
+    open var placeholderOffset = CGPoint(x: 0, y: -10)
     
     /**
      The color of the border.
@@ -116,14 +117,14 @@ import UIKit
     }
     
     private func rectForBounds(_ bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x, y: bounds.origin.y + placeholderHeight, width: bounds.size.width, height: bounds.size.height - placeholderHeight)
+        return CGRect(x: bounds.origin.x, y: bounds.origin.y + placeholderHeight, width: bounds.size.width, height: bounds.size.height - placeholderHeight - placeholderOffset.y / 2)
     }
     
     // MARK: - Overrides
     
     open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         if isFirstResponder || text!.isNotEmpty {
-            return CGRect(x: placeholderInsets.x, y: placeholderInsets.y, width: bounds.width, height: placeholderHeight)
+            return CGRect(x: placeholderInsets.x, y: placeholderInsets.y + placeholderOffset.y, width: bounds.width, height: placeholderHeight + placeholderOffset.y)
         } else {
             return textRect(forBounds: bounds)
         }
@@ -134,7 +135,7 @@ import UIKit
     }
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y + placeholderHeight/2)
+        return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y + placeholderHeight/2 - placeholderOffset.y / 4)
     }
 }
 
